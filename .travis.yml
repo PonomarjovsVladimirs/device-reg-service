@@ -1,0 +1,17 @@
+language: java
+jdk:
+- openjdk15
+services:
+  docker
+branches:
+  only:
+    - master
+before_install:
+  - chmod +x mvnw
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+after_success:
+
+  - docker login -u "$HEROKU_USERNAME" -p "$HEROKU_PASSWORD" registry.heroku.com
+  - docker build -t registry.heroku.com/device-reg-service/web .
+  - docker push registry.heroku.com/device-reg-service/web
+  - heroku container:release web --app device-reg-service
