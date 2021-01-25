@@ -34,6 +34,19 @@ public class Device {
         this.uplinkMacAddress = uplinkMacAddress;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
     public DeviceType getDeviceType() {
         return deviceType;
     }
@@ -57,5 +70,8 @@ public class Device {
     public void setUplinkMacAddress(String uplinkMacAddress) {
         this.uplinkMacAddress = uplinkMacAddress;
     }
+
+
+
 
 }
