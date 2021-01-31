@@ -32,7 +32,7 @@ public class DeviceService {
      * @param tree - if present - response will be of tree structure
      */
     public DeviceResponse getDevicesResponse(String macAddress, Boolean tree) {
-         return new DeviceResponse(createTrees(getDevices(macAddress, tree)));
+        return new DeviceResponse(createTrees(getDevices(macAddress, tree)));
     }
 
     List<DeviceNode> getDevices(String macAddress, Boolean tree) {
@@ -43,12 +43,7 @@ public class DeviceService {
     }
 
     List<DeviceNode> getTopology(String macAddress) {
-        List<String> rootAddresses = StringUtils.isBlank(macAddress) ?
-                getRootAddresses() :
-                Collections.singletonList((deviceRepository.findByMacAddress(macAddress)
-                        .orElseThrow(() -> new UnExistingDeviceException(macAddress))
-                        .getMacAddress()));
-        return rootAddresses.stream()
+        return getRoots(macAddress).stream()
                 .map(r -> topologyService.getPopulatedRoot(r, deviceTransformer.entitiesToNodes(deviceRepository.getDeviceTopology(r)
                         .orElseThrow(() -> new UnExistingDeviceException(r)))))
                 .collect(Collectors.toList());
@@ -65,6 +60,15 @@ public class DeviceService {
 
     List<DeviceTree> createTrees(List<DeviceNode> nodes) {
         return nodes.stream().map(DeviceTree::new).collect(Collectors.toList());
+    }
+
+    List<String> getRoots(String macAddress) {
+        return StringUtils.isBlank(macAddress) ?
+                getRootAddresses() :
+                Collections.singletonList((deviceRepository.findByMacAddress(macAddress)
+                        .orElseThrow(() -> new UnExistingDeviceException(macAddress))
+                        .getMacAddress()));
+
     }
 
     List<String> getRootAddresses() {

@@ -30,7 +30,7 @@ public class DeviceRegControllerTest {
     @Test
     public void shouldReturnDeviceTreesNoInput() throws Exception {
         Mockito.when(deviceServiceMock.getDevicesResponse(null, false)).thenReturn(getSimpleResponse());
-        mvc.perform(MockMvcRequestBuilders.get("/device")
+        mvc.perform(MockMvcRequestBuilders.get("/devices")
                 .param("tree", "false")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -40,7 +40,7 @@ public class DeviceRegControllerTest {
     @Test
     public void shouldReturnDeviceTreesWithInput() throws Exception {
         Mockito.when(deviceServiceMock.getDevicesResponse("root", false)).thenReturn(getSimpleResponse());
-        mvc.perform(MockMvcRequestBuilders.get("/device/root")
+        mvc.perform(MockMvcRequestBuilders.get("/devices/root")
                 .param("tree", "false")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -50,7 +50,7 @@ public class DeviceRegControllerTest {
     @Test
     public void shouldReturnOkForPost() throws Exception {
         Device device = createEntity();
-        mvc.perform(MockMvcRequestBuilders.post("/device")
+        mvc.perform(MockMvcRequestBuilders.post("/devices")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(device)))
