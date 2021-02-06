@@ -11,21 +11,21 @@ public class TopologyService {
 
     /** returns populated root node for tree structure */
     public DeviceNode getPopulatedRoot(String rootAddress,List<DeviceNode> treeNodes) {
-        return getRootNode(rootAddress, getPopulatedNodes(treeNodes));
+        return findRootNode(rootAddress, gatherPopulatedNodes(treeNodes));
     }
 
-    List<DeviceNode> getPopulatedNodes(List<DeviceNode> treeNodes) {
-        treeNodes.forEach(node -> node.setChildren(getChildrenNodes(node, treeNodes)));
+    List<DeviceNode> gatherPopulatedNodes(List<DeviceNode> treeNodes) {
+        treeNodes.forEach(node -> node.setChildren(gatherChildrenNodes(node, treeNodes)));
         return treeNodes;
     }
 
-    List<DeviceNode> getChildrenNodes(DeviceNode node, List<DeviceNode> treeNodes) {
+    List<DeviceNode> gatherChildrenNodes(DeviceNode node, List<DeviceNode> treeNodes) {
         return treeNodes.stream()
                 .filter(d -> node.getData().getMacAddress().equals(d.getData().getUplinkMacAddress()))
                 .collect(Collectors.toList());
     }
 
-    DeviceNode getRootNode(String rootAddress,List<DeviceNode> treeNodes){
+    DeviceNode findRootNode(String rootAddress, List<DeviceNode> treeNodes){
         return treeNodes.stream()
                 .filter(n -> rootAddress.equals(n.getData().getMacAddress()))
                 .findFirst()
